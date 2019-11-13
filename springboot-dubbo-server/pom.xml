@@ -18,6 +18,7 @@
     <modules>
         <module>springboot-dubbo-api-demo</module>
         <module>springboot-dubbo-provider-demo</module>
+        <module>springboot-dubbo-comsumer-demo</module>
     </modules>
 
     <properties>
