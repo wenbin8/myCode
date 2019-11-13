@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://code.alibabatech.com/schema/dubbo
+       http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!-- 提供方应用信息，用于计算依赖关系-->
+    <dubbo:application name="practice-clent"/>
+
+    <dubbo:protocol name="rest" port="8888" server="jetty"/>
+
+
+    <!-- 使用直连 -->
+    <!--<dubbo:registry address="N/A" />-->
+    <!-- 使用zookeeper注册中心暴露服务地址 -->
+    <dubbo:registry id="registry1" address="zookeeper://192.168.1.4:2181?backup=192.168.1.4:2182,192.168.1.4:2183" file="/dubbo-server1" />
+    <dubbo:registry id="registry2" address="zookeeper://192.168.1.4:2181?backup=192.168.1.4:2182,192.168.1.4:2183" file="/dubbo-server2" />
+
+
+     <!--使用直连 -->
+    <!--<dubbo:reference id="loginService" interface="com.wenbin.dubbo.demo.service.LoginSerivce"-->
+                     <!--url="dubbo://192.168.1.2:20880/com.wenbin.dubbo.demo.serivce.LoginSerivce"/>-->
+
+    <!-- 使用zookeeper注册中心 -->
+    <dubbo:reference id="loginService" interface="com.wenbin.dubbo.demo.serivce.LoginSerivce" registry="registry2" protocol="webservice" />
+
+    <dubbo:reference id="userService" interface="com.wenbin.dubbo.demo.serivce.UserService" registry="registry1" protocol="rest" />
+
+</beans>
