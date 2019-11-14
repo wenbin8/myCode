@@ -1,6 +1,7 @@
 package com.wenbin.dubbo.demo.comsumerdemo;
 
 import com.wenbin.demo.dubbo.api.SayHelloService;
+import org.apache.dubbo.config.annotation.Method;
 import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

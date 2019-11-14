@@ -7,6 +7,7 @@ import org.apache.dubbo.config.annotation.Service;
 public class SayHelloServiceImpl implements SayHelloService {
     @Override
     public String hello(String name) {
+        System.out.println("hello,被调用");
         return "hello:" + name;
     }
 }
