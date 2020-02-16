@@ -15,7 +15,7 @@ public class ModifyService implements IModifyService {
 	 * 增加
 	 */
 	public String add(String name,String addr) throws Exception {
-		throw new Exception("这是Tom老师故意抛的异常！！");
+		throw new Exception("这是故意抛的异常！！");
 		//return "modifyService add,name=" + name + ",addr=" + addr;
 	}
 
