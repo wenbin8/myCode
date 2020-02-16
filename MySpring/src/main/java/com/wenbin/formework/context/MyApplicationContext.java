@@ -171,7 +171,7 @@ public class MyApplicationContext extends MyDefaultListableBeanFactory implement
 
     @Override
     public Object getBean(Class<?> beanClass) throws Exception {
-        return getBean(toLowerFirstCase(beanClass.getSimpleName()));
+        return getBean(beanClass.getName());
     }
 
     public String[] getBeanDefinitionNames() {
@@ -186,12 +186,4 @@ public class MyApplicationContext extends MyDefaultListableBeanFactory implement
         return this.reader.getConfig();
     }
 
-    private String toLowerFirstCase(String simpleName) {
-        char [] chars = simpleName.toCharArray();
-        //之所以加，是因为大小写字母的ASCII码相差32，
-        // 而且大写字母的ASCII码要小于小写字母的ASCII码
-        //在Java中，对char做算学运算，实际上就是对ASCII码做算学运算
-        chars[0] += 32;
-        return String.valueOf(chars);
-    }
 }
