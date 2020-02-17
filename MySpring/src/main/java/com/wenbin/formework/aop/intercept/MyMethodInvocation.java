@@ -34,7 +34,7 @@ public class MyMethodInvocation implements MyJoinPoint {
     }
 
     public Object proceed() throws Throwable {
-        // 如果Interceptor执行完了，则执行JoinPoint（实际Service的方法）
+        // 如果Interceptor执行完了，则执行JoinPoint（实际Service的方法）递归退出。
         if (this.currentInterceptorIndex == this.interceptorsAndDynamicMethodMatchers.size() - 1) {
             return this.method.invoke(this.target, this.arguments);
         }
