@@ -3,12 +3,17 @@ package com.wenbin.formework.context;
 import com.wenbin.formework.annotation.MyAutowired;
 import com.wenbin.formework.annotation.MyController;
 import com.wenbin.formework.annotation.MyService;
+import com.wenbin.formework.aop.MyAopProxy;
+import com.wenbin.formework.aop.MyCglibAopProxy;
+import com.wenbin.formework.aop.MyJdkDynamicAopProxy;
+import com.wenbin.formework.aop.config.MyAopConfig;
+import com.wenbin.formework.aop.support.MyAdvisedSupport;
 import com.wenbin.formework.beans.MyBeanWrapper;
 import com.wenbin.formework.beans.config.MyBeanDefinition;
 import com.wenbin.formework.beans.config.MyBeanPostProcessor;
 import com.wenbin.formework.beans.support.MyBeanDefinitionReader;
-import com.wenbin.formework.core.MyBeanFactory;
 import com.wenbin.formework.beans.support.MyDefaultListableBeanFactory;
+import com.wenbin.formework.core.MyBeanFactory;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -159,6 +164,17 @@ public class MyApplicationContext extends MyDefaultListableBeanFactory implement
             } else {
                 Class<?> clazz = Class.forName(className);
                 instance = clazz.newInstance();
+
+                // AOP配置加载
+                MyAdvisedSupport config = instantionAopConfig(myBeanDefinition);
+                config.setTargetClass(clazz);
+                config.setTarget(instance);
+
+                //符合PointCut的规则的话，闯将代理对象
+                if(config.pointCutMatch()) {
+                    instance = createProxy(config).getProxy();
+                }
+
                 this.singletonObjects.put(className, instance);
                 this.singletonObjects.put(myBeanDefinition.getFactoryBeanName(), instance);
             }
@@ -167,6 +183,26 @@ public class MyApplicationContext extends MyDefaultListableBeanFactory implement
         }
 
         return instance;
+    }
+
+    private MyAopProxy createProxy(MyAdvisedSupport config) {
+
+        Class targetClass = config.getTargetClass();
+        if(targetClass.getInterfaces().length > 0){
+            return new MyJdkDynamicAopProxy(config);
+        }
+        return new MyCglibAopProxy(config);
+    }
+
+    private MyAdvisedSupport instantionAopConfig(MyBeanDefinition gpBeanDefinition) {
+        MyAopConfig config = new MyAopConfig();
+        config.setPointCut(this.reader.getConfig().getProperty("pointCut"));
+        config.setAspectClass(this.reader.getConfig().getProperty("aspectClass"));
+        config.setAspectBefore(this.reader.getConfig().getProperty("aspectBefore"));
+        config.setAspectAfter(this.reader.getConfig().getProperty("aspectAfter"));
+        config.setAspectAfterThrow(this.reader.getConfig().getProperty("aspectAfterThrow"));
+        config.setAspectAfterThrowingName(this.reader.getConfig().getProperty("aspectAfterThrowingName"));
+        return new MyAdvisedSupport(config);
     }
 
     @Override

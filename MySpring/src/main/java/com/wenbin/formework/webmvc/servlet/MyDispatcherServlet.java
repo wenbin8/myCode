@@ -173,7 +173,7 @@ public class MyDispatcherServlet extends HttpServlet {
         MyHandlerMapping handler = getHandler(req);
 
         if (handler == null) {
-            processDispatchResult(req, resp, new MyModelAndView("4040"));
+            processDispatchResult(req, resp, new MyModelAndView("404"));
         }
 
         //2, 准备调用前的参数
